@@ -15,16 +15,16 @@ jobs:
 
     - name: Generate random number
       id: vars
-      run: echo "RANDOM_NUMBER=$RANDOM" >> $GITHUB_ENV
+      run: echo "RANDOM_NUMBER=($RANDOM)" >> $GITHUB_ENV
 
     - name: Zip files
-      run: zip -r my-files ${{ env.RANDOM_NUMBER }}.zip . -x "*.git*"
+      run: zip -r my-files-${{ env.RANDOM_NUMBER }}.zip . -x "*.git*"
 
     - name: Upload ZIP file as artifact
       uses: actions/upload-artifact@v4
       with:
-        name: my-files ${{ env.RANDOM_NUMBER }}
-        path: my-files ${{ env.RANDOM_NUMBER }}.zip
+        name: my-files-${{ env.RANDOM_NUMBER }}
+        path: my-files-${{ env.RANDOM_NUMBER }}.zip
         retention-days: 5
 
     - name: Configure AWS credentials
@@ -38,4 +38,4 @@ jobs:
       uses: usualdesigner/s3-artifact-upload@main
       with:
           bucket-name: 9ja
-          file: my-files ${{ env.RANDOM_NUMBER }}.zip
+          file: my-files-${{ env.RANDOM_NUMBER }}.zip
