@@ -3,7 +3,7 @@ name: Artifact files
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   zip-files:
@@ -22,3 +22,16 @@ jobs:
         name: my-files
         path: my-files.zip
         retention-days: 5
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v4
+      with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-north-1
+  
+    - name: Upload artifacts to AWS S3
+      uses: usualdesigner/s3-artifact-upload@main
+      with:
+          bucket-name: 9ja
+          file: my-files.zip
